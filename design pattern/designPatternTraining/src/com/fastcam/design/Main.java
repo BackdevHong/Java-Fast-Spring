@@ -2,6 +2,12 @@ package com.fastcam.design;
 
 import com.fastcam.design.adapter.*;
 import com.fastcam.design.decorator.*;
+import com.fastcam.design.facade.Ftp;
+import com.fastcam.design.facade.Reader;
+import com.fastcam.design.facade.SftpClient;
+import com.fastcam.design.facade.Writer;
+import com.fastcam.design.observer.Button;
+import com.fastcam.design.observer.IButtonListener;
 import com.fastcam.design.proxy.Browser;
 import com.fastcam.design.proxy.BrowserProxy;
 import com.fastcam.design.singleton.AClass;
@@ -68,6 +74,51 @@ public class Main {
         // a5
         ICar audi5 = new A5(audi, "A5");
         audi5.showPrice();
+
+        System.out.println();
+
+        // observer
+        Button button = new Button("버튼");
+
+        button.addListener(new IButtonListener() {
+            @Override
+            public void clickEvent(String event) {
+                System.out.println(event);
+            }
+        });
+
+        button.click("메시지 전달 : click1");
+        button.click("메시지 전달 : click2");
+        button.click("메시지 전달 : click3");
+        button.click("메시지 전달 : click4");
+
+        System.out.println();
+        // Facade
+
+        // facade 미적용
+        Ftp ftpClient = new Ftp("www.foo.co.kr", 22, "/home/etc");
+        ftpClient.connect();
+        ftpClient.moveDirectory();
+
+        Writer writer = new Writer("text.tmp");
+        writer.fileConnect();
+        writer.write();
+
+        Reader reader = new Reader("text.tmp");
+        reader.fileConnect();
+        reader.fileRead();
+
+        reader.fileDisconnect();
+        writer.fileDisconnect();
+        ftpClient.disConnect();
+
+        System.out.println();
+        // facade 적용
+        SftpClient sftpClient = new SftpClient("www.bar.co.kr", 22, "/home/etc", "text.tmp");
+        sftpClient.connect();
+        sftpClient.write();
+        sftpClient.read();
+        sftpClient.disConnect();
     }
 
     // 콘센트
