@@ -13,6 +13,7 @@ import com.fastcam.design.proxy.BrowserProxy;
 import com.fastcam.design.singleton.AClass;
 import com.fastcam.design.singleton.BClass;
 import com.fastcam.design.singleton.SocketClient;
+import com.fastcam.design.strategy.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -119,6 +120,33 @@ public class Main {
         sftpClient.write();
         sftpClient.read();
         sftpClient.disConnect();
+
+        System.out.println();
+
+        // strategy
+        Encoder encoder = new Encoder();
+
+        // base64
+        EncodingStrategy base64 = new Base64Strategy();
+
+        // normal
+        EncodingStrategy normal = new NormalStrategy();
+
+        // message set
+        String message = "hello java";
+
+        encoder.setEncodingStrategy(base64);
+        String base64result = encoder.getMessage(message);
+
+        encoder.setEncodingStrategy(normal);
+        String normalResult = encoder.getMessage(message);
+
+        System.out.println("normal Result = " + normalResult);
+        System.out.println("base64 Result = " + base64result);
+
+        encoder.setEncodingStrategy(new AppendStrategy());
+        String appendResult = encoder.getMessage(message);
+        System.out.println("append Result = " + appendResult);
     }
 
     // 콘센트
