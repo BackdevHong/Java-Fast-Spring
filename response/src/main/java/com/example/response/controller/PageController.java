@@ -13,16 +13,4 @@ public class PageController {
     public String main() {
         return "main.html";
     }
-
-    // ResponseEntity
-
-    // ResponseBody
-    @ResponseBody
-    @GetMapping("/user")
-    public User user() {
-        var user = new User();
-        user.setName("steve");
-        user.setAddress("FastCampus");
-        return user;
-    }
 }
